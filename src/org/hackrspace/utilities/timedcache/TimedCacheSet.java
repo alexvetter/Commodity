@@ -63,11 +63,15 @@ public class TimedCacheSet<E> extends AbstractSet<E> implements Set<E>, Cloneabl
 
 		gc = new TimerTask() {
 			public void run() {
-				Set<CacheItem<E>> s = new HashSet<CacheItem<E>>(set);
-				for (CacheItem<E> e : s) {
-					if (!e.isAlive()) {
-						set.remove(e);
+				try {
+					Set<CacheItem<E>> s = new HashSet<CacheItem<E>>(set);
+					for (CacheItem<E> e : s) {
+						if (!e.isAlive()) {
+							set.remove(e);
+						}
 					}
+				} catch (NoSuchElementException e) {
+					//ignore
 				}
 			}
 		};
