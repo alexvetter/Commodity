@@ -1,4 +1,4 @@
-package org.hackrspace.utilities.mergelist;
+package org.hackrspace.commons.collections.mergelist;
 
 import java.util.ArrayList;
 import java.util.Iterator;

@@ -1,4 +1,4 @@
-package org.hackrspace.utilities.stopwatch;
+package org.hackrspace.commons.utils.stopwatch;
 
 import java.util.HashMap;
 import java.util.logging.Level;

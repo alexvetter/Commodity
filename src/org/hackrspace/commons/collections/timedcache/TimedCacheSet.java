@@ -1,4 +1,4 @@
-package org.hackrspace.utilities.timedcache;
+package org.hackrspace.commons.collections.timedcache;
 
 import java.util.AbstractSet;
 import java.util.Collections;
