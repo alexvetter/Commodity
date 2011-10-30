@@ -1,4 +1,4 @@
-package org.hackrspace.commons.collections.mergelist;
+package de.alexvetter.code.gimcrack.collections.mergelist;
 
 import java.util.ArrayList;
 import java.util.Iterator;

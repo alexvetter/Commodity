@@ -1,4 +1,4 @@
-package org.hackrspace.commons.collections.timedcache;
+package de.alexvetter.code.gimcrack.collections.timedcache;
 
 import java.util.Collections;
 import java.util.HashSet;

@@ -1,4 +1,4 @@
-package org.hackrspace.commons.html.htmltag;
+package de.alexvetter.code.gimcrack.html.htmltag;
 
 import java.util.HashMap;
 import java.util.Map;

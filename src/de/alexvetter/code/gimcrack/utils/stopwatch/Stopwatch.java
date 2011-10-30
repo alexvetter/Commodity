@@ -1,4 +1,4 @@
-package org.hackrspace.commons.utils.stopwatch;
+package de.alexvetter.code.gimcrack.utils.stopwatch;
 
 import java.util.HashMap;
 import java.util.logging.Level;

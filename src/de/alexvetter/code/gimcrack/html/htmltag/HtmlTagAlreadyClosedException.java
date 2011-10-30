@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.hackrspace.commons.html.htmltag;
+package de.alexvetter.code.gimcrack.html.htmltag;
 
 /**
  * @author alexandervetter
