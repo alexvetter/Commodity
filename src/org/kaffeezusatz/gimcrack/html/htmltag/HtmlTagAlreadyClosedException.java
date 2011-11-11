@@ -1,7 +1,7 @@
 /**
  * 
  */
-package de.alexvetter.code.gimcrack.html.htmltag;
+package org.kaffeezusatz.gimcrack.html.htmltag;
 
 /**
  * @author alexandervetter

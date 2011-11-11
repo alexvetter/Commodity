@@ -1,4 +1,4 @@
-package de.alexvetter.code.gimcrack.collections.timedcache;
+package org.kaffeezusatz.gimcrack.collections.timedcache;
 
 import java.util.AbstractSet;
 import java.util.Collections;

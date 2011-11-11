@@ -1,4 +1,4 @@
-package de.alexvetter.code.gimcrack.collections.mergelist;
+package org.kaffeezusatz.gimcrack.collections.mergelist;
 
 import java.util.ArrayList;
 import java.util.Iterator;
