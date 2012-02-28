@@ -1,11 +1,11 @@
-package org.kaffeezusatz.gimcrack.collections.mergelist;
+package org.kaffeezusatz.gimcrack.collections;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import junit.framework.TestCase;
 
-public class TestMergeList extends TestCase {
+public class MergeListTest extends TestCase {
 	public void testIsSorted() {
 		List<Integer> l1 = new ArrayList<Integer>();
 		List<Integer> l2 = new ArrayList<Integer>();

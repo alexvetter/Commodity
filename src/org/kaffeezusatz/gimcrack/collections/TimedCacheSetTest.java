@@ -1,4 +1,4 @@
-package org.kaffeezusatz.gimcrack.collections.timedcache;
+package org.kaffeezusatz.gimcrack.collections;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -9,7 +9,7 @@ import junit.framework.TestCase;
 /**
  * 
  */
-public class TestTimedCacheSet extends TestCase {
+public class TimedCacheSetTest extends TestCase {
 	public void test() throws InterruptedException {
 		Set<String> cs = Collections.synchronizedSet(new TimedCacheSet<String>(100));
 		

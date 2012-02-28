@@ -1,4 +1,4 @@
-package org.kaffeezusatz.gimcrack.html.htmltag;
+package org.kaffeezusatz.gimcrack.html;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -121,5 +121,60 @@ public class HtmlTag {
 		r.append('>');
 		
 		return r.toString();
+	}
+	
+	public class HtmlTagAlreadyClosedException extends RuntimeException {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = -6643692933596277375L;
+
+		/**
+		 * 
+		 */
+		public HtmlTagAlreadyClosedException() {
+		}
+
+		/**
+		 * @param message
+		 */
+		public HtmlTagAlreadyClosedException(String message) {
+			super(message);
+		}
+
+		/**
+		 * @param cause
+		 */
+		public HtmlTagAlreadyClosedException(Throwable cause) {
+			super(cause);
+		}
+
+		/**
+		 * @param message
+		 * @param cause
+		 */
+		public HtmlTagAlreadyClosedException(String message, Throwable cause) {
+			super(message, cause);
+		}
+	}
+	
+	public class HtmlTagIsNotClosedException extends RuntimeException {
+		
+		private static final long serialVersionUID = 6795526863948495215L;
+
+		public HtmlTagIsNotClosedException() {
+		}
+
+		public HtmlTagIsNotClosedException(String message) {
+			super(message);
+		}
+
+		public HtmlTagIsNotClosedException(Throwable cause) {
+			super(cause);
+		}
+
+		public HtmlTagIsNotClosedException(String message, Throwable cause) {
+			super(message, cause);
+		}
 	}
 }

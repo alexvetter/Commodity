@@ -1,4 +1,4 @@
-package org.kaffeezusatz.gimcrack.utils.stopwatch;
+package org.kaffeezusatz.gimcrack.utils;
 
 import java.util.HashMap;
 import java.util.logging.Level;
