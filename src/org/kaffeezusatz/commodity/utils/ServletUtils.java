@@ -1,4 +1,4 @@
-package org.kaffeezusatz.gimcrack.utils;
+package org.kaffeezusatz.commodity.utils;
 
 public class ServletUtils {
 

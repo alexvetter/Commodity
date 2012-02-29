@@ -1,4 +1,4 @@
-package org.kaffeezusatz.gimcrack.utils;
+package org.kaffeezusatz.commodity.utils;
 import static org.junit.Assert.*;
 
 import java.net.MalformedURLException;

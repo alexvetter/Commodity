@@ -1,4 +1,4 @@
-package org.kaffeezusatz.gimcrack.html;
+package org.kaffeezusatz.commodity.html;
 
 import java.util.HashMap;
 import java.util.Map;

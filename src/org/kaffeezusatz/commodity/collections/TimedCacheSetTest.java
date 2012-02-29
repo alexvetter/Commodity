@@ -1,4 +1,4 @@
-package org.kaffeezusatz.gimcrack.collections;
+package org.kaffeezusatz.commodity.collections;
 
 import java.util.Collections;
 import java.util.HashSet;

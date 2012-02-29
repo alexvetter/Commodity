@@ -1,4 +1,4 @@
-package org.kaffeezusatz.gimcrack.utils;
+package org.kaffeezusatz.commodity.utils;
 import java.util.Arrays;
 import java.util.Collection;
 

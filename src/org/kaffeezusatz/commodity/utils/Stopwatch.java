@@ -1,4 +1,4 @@
-package org.kaffeezusatz.gimcrack.utils;
+package org.kaffeezusatz.commodity.utils;
 
 import java.util.HashMap;
 import java.util.logging.Level;
