@@ -5,13 +5,19 @@ import java.util.Collection;
 public class Joiner {
 	private String joiner;
 	private boolean ignoreNull = false;
+	private boolean removeTrailingJoiner = false;
 	
 	private Joiner(String joiner) {
 		this.joiner = joiner;
 	}
 	
-	public Joiner ignoreNull() {
+	public Joiner setIgnoreNull() {
 		this.ignoreNull = true;
+		return this;
+	}
+	
+	public Joiner setRemoveTrailingJoiner() {
+		this.removeTrailingJoiner  = true;
 		return this;
 	}
 	
@@ -33,9 +39,13 @@ public class Joiner {
 			}
 			
 			part = object.toString();
-			part = removeLeadingJoiner(part);
+			part = removeLeadingJoiner(part, this.joiner);
 			
 			joined.append(part);
+		}
+		
+		if (removeTrailingJoiner) {
+			return removeTrailingJoiner(joined.toString(), this.joiner);
 		}
 		
 		return joined.toString();
@@ -45,11 +55,19 @@ public class Joiner {
 		return join(Arrays.asList(parts));
 	}
 	
-	private String removeLeadingJoiner(String part) {
-		if (part.startsWith(this.joiner)) {
-			return part.substring(this.joiner.length());
+	public static String removeLeadingJoiner(String string, String joiner) {
+		if (string.startsWith(joiner)) {
+			return string.substring(joiner.length());
 		}
 		
-		return part;
+		return string;
+	}
+	
+	public static String removeTrailingJoiner(String string, String joiner) {
+		if (string.endsWith(joiner)) {
+			return string.substring(0, string.length() - joiner.length());
+		}
+		
+		return string;
 	}
 }
