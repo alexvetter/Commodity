@@ -22,7 +22,7 @@ public class UrlHelper {
 	}
 	
 	public static URL getUrl(Protocol protocol, Object... parts) {
-		return createUrl(addProtocol(Joiner.on("/").ignoreNull().join(parts), protocol));
+		return createUrl(addProtocol(Joiner.on("/").setIgnoreNull().join(parts), protocol));
 	}
 	
 	public enum Protocol {
@@ -41,9 +41,11 @@ public class UrlHelper {
 		if (matcher.find()) {
 			String currentProtocol = matcher.group(0);
 			if (currentProtocol.equals("http://") && protocol == Protocol.https) {
+				//convertion from http to https is fine
 				url = url.replace("http://", "");
 			} else if (currentProtocol.equals("https://") && protocol == Protocol.http) {
-				url = url.replace("https://", "");
+				//we should not make https to http
+				return url;
 			} else if (!currentProtocol.equals(protocol.toString()+"://")) {
 				throw new IllegalArgumentException("url already has a protocol");
 			} else {

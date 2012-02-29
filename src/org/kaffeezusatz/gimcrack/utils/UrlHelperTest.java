@@ -22,7 +22,7 @@ public class UrlHelperTest extends UrlHelper {
 		}
 		
 		assertEquals("https://test.com", addProtocol("http://test.com", Protocol.https));
-		assertEquals("http://test.com", addProtocol("https://test.com", Protocol.http));
+		assertEquals("https://test.com", addProtocol("https://test.com", Protocol.http));
 		
 		assertEquals("http://test.com/context/servlet", getUrl(Protocol.http, "test.com", "context", "servlet").toString());
 		assertEquals("http://test.com/siemens/servlet/", getUrl(Protocol.http, new URL("http://test.com/siemens/"), "/servlet/").toString());
