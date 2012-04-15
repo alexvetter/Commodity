@@ -1,4 +1,4 @@
-package org.kaffeezusatz.commodity.utils;
+package org.kaffeezusatz.commodity.ui;
 
 import java.util.HashMap;
 import java.util.Map;

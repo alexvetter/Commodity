@@ -1,4 +1,4 @@
-package org.kaffeezusatz.commodity.utils;
+package org.kaffeezusatz.commodity.ui;
 
 import java.awt.Component;
 import java.awt.GridBagConstraints;
@@ -29,11 +29,13 @@ public class GridBagHelper {
 		return this;
 	}
 	
-	public void add(Component... comps) {
+	public GridBagHelper add(Component... comps) {
 		for (Component component : comps) {
 			comp.add(component, getConstraints());
 			getConstraints().gridx++;
 		}
+		
+		return this;
 	}
 
 }
