@@ -7,6 +7,7 @@ import javax.swing.JComponent;
 
 public class GridBagHelper {
 	private JComponent comp;
+	
 	public GridBagConstraints gbc;
 	
 	public GridBagHelper(JComponent comp, GridBagConstraints gbc) {
@@ -16,6 +17,8 @@ public class GridBagHelper {
 	
 	public GridBagHelper(JComponent comp) {
 		this(comp, new GridBagConstraints());
+		getConstraints().gridx = 0;
+		getConstraints().gridy = 0;
 	}
 	
 	public GridBagConstraints getConstraints() {
@@ -24,7 +27,7 @@ public class GridBagHelper {
 	
 	public GridBagHelper addRow() {
 		getConstraints().gridy++;
-		getConstraints().gridx = 1;
+		getConstraints().gridx = 0;
 		
 		return this;
 	}
@@ -37,5 +40,4 @@ public class GridBagHelper {
 		
 		return this;
 	}
-
 }
