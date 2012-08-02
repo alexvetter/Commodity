@@ -1,180 +1,108 @@
 package org.kaffeezusatz.commodity.html;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.commons.lang.StringEscapeUtils;
 
 public class HtmlTag {
-		
-	private String tag;
 	private Map<String, String> attributes;
+	private String name;
 	private StringBuffer value;
-	private boolean close;
 	
 	public HtmlTag(String name) {
-		this.tag = name;
+		this.name = name;
 		this.attributes = new HashMap<String, String>();
 		this.value = new StringBuffer();
-		this.close = false;
 	}
 	
-	public String getTag() {
-		return tag;
+	public HtmlTag addAttribute(String name, String value) {
+		this.attributes.put(name, value);
+		return this;
 	}
 
+	public HtmlTag setAttributes(Map<String, String> m) {
+		this.attributes.clear();
+		this.attributes.putAll(m);
+		return this;
+	}
+
+	public HtmlTag appendValue(HtmlTag value) {
+		this.value.append(value.toString());
+		return this;
+	}
+
+	public HtmlTag appendValue(String value) {
+		this.value.append(value);
+		return this;
+	}
+	
 	public Map<String, String> getAttributes() {
 		return attributes;
 	}
-
+	
+	public String getName() {
+		return name;
+	}
+	
 	public String getValue() {
 		return value.toString();
 	}
 	
-	public boolean isClosed() {
-		return this.close;
-	}
-	
-	private void checkClosed() {
-		if (this.close) {
-			throw new HtmlTagAlreadyClosedException();
-		}
-	}
-
-	public void addAttribute(String name, String value) {
-		checkClosed();
-		
-		this.attributes.put(name, value);
-	}
-	
 	public void removeAttribute(String name) {
-		checkClosed();
-		
 		this.attributes.remove(name);
 	}
 	
-	public void addAttributes(Map<String, String> m) {
-		checkClosed();
-		
-		this.attributes.putAll(m);
-	}
-	
-	public void setValue(String value) {
-		checkClosed();
-		
-		this.value = new StringBuffer(StringEscapeUtils.escapeHtml(value));
-	}
-	
-	public void appendValue(String value) {
-		checkClosed();
-		
-		this.value.append(value);
-	}
-	
-	public void setValue(HtmlTag value) {
-		checkClosed();
-		
+	public HtmlTag setValue(HtmlTag value) {
 		this.value = new StringBuffer(value.toString());
+		return this;
 	}
 	
-	public void appendValue(HtmlTag value) {
-		checkClosed();
-		
-		this.value.append(value.toString());
+	public HtmlTag setValue(String value) {
+		this.value = new StringBuffer(StringEscapeUtils.escapeHtml(value));
+		return this;
 	}
 	
-	public void close() {
-		this.close = true;
-	}
-	
-	
+	@Override
 	public String toString() {
-		if (!isClosed()) {
-			throw new HtmlTagIsNotClosedException();
-		}
-		
-		StringBuffer r = new StringBuffer();
+		final StringBuffer r = new StringBuffer();
 		
 		r.append('<');
-		r.append(this.tag);
-		r.append(' ');
+		r.append(this.name);
 		
-		for (String name : this.attributes.keySet()) {
-			r.append(name);
+		final Iterator<String> i = this.attributes.keySet().iterator();
+		String att = null;
+		if (i.hasNext()) {
+			r.append(' ');
+		}
+		while (i.hasNext()) {
+			att = i.next();
+			
+			r.append(att);
 			r.append('=');
 			r.append('"');
-			r.append(this.attributes.get(name));
+			r.append(this.attributes.get(att));
 			r.append('"');
-			r.append(' ');
+			
+			if (i.hasNext()) {
+				r.append(' ');
+			}
 		}
 		
 		if (value.toString().isEmpty()) {
+			r.append(' ');
 			r.append('/');
 		} else {
 			r.append('>');
 			r.append(value.toString());
 			r.append('<');
 			r.append('/');
-			r.append(this.tag);
+			r.append(this.name);
 		}
 		
 		r.append('>');
 		
 		return r.toString();
-	}
-	
-	public class HtmlTagAlreadyClosedException extends RuntimeException {
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = -6643692933596277375L;
-
-		/**
-		 * 
-		 */
-		public HtmlTagAlreadyClosedException() {
-		}
-
-		/**
-		 * @param message
-		 */
-		public HtmlTagAlreadyClosedException(String message) {
-			super(message);
-		}
-
-		/**
-		 * @param cause
-		 */
-		public HtmlTagAlreadyClosedException(Throwable cause) {
-			super(cause);
-		}
-
-		/**
-		 * @param message
-		 * @param cause
-		 */
-		public HtmlTagAlreadyClosedException(String message, Throwable cause) {
-			super(message, cause);
-		}
-	}
-	
-	public class HtmlTagIsNotClosedException extends RuntimeException {
-		
-		private static final long serialVersionUID = 6795526863948495215L;
-
-		public HtmlTagIsNotClosedException() {
-		}
-
-		public HtmlTagIsNotClosedException(String message) {
-			super(message);
-		}
-
-		public HtmlTagIsNotClosedException(Throwable cause) {
-			super(cause);
-		}
-
-		public HtmlTagIsNotClosedException(String message, Throwable cause) {
-			super(message, cause);
-		}
 	}
 }
