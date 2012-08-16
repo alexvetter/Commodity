@@ -1,21 +1,20 @@
 package org.kaffeezusatz.commodity.ui;
 
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.GridBagConstraints;
 
-import javax.swing.JComponent;
-
 public class GridBagHelper {
-	private JComponent comp;
+	private Container comp;
 	
 	public GridBagConstraints gbc;
 	
-	public GridBagHelper(JComponent comp, GridBagConstraints gbc) {
+	public GridBagHelper(Container comp, GridBagConstraints gbc) {
 		this.comp = comp;
 		this.gbc = gbc;
 	}
 	
-	public GridBagHelper(JComponent comp) {
+	public GridBagHelper(Container comp) {
 		this(comp, new GridBagConstraints());
 		getConstraints().gridx = 0;
 		getConstraints().gridy = 0;
