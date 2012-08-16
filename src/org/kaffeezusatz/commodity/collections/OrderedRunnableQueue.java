@@ -1,5 +1,6 @@
 package org.kaffeezusatz.commodity.collections;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.TreeMap;
@@ -23,6 +24,8 @@ public class OrderedRunnableQueue {
 		this.lastNumber = -1;
 		
 		this.queue = new TreeMap<Integer, Runnable>();
+		
+		this.listener = new LinkedList<OrderedRunnableQueue.OrderedRunnableQueueListener>();
 	}
 
 	public void addListener(final OrderedRunnableQueueListener listener) {
