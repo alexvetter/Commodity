@@ -1,10 +1,13 @@
 package org.kaffeezusatz.commodity.collections;
 
-import org.junit.Test;
+import static org.junit.Assert.*;
 
-public class OrderedRunnableQueueTest {
+import org.junit.Test;
+import org.kaffeezusatz.commodity.collections.OrderedRunnableQueue.OrderedRunnableQueueListener;
+
+public class OrderedRunnableQueueTest implements OrderedRunnableQueueListener {
 	@Test
-	public final void test() {
+	public final void add() {
 		final Runnable r = new Runnable() {
 			@Override
 			public void run() {
@@ -13,6 +16,8 @@ public class OrderedRunnableQueueTest {
 		};
 		
 		final OrderedRunnableQueue orq = new OrderedRunnableQueue(5);
+		
+		orq.addListener(this);
 		
 		orq.add(0, r); // 0
 		orq.add(3, r); // 1
@@ -58,5 +63,37 @@ public class OrderedRunnableQueueTest {
 			orq.add(null, null);
 		} catch (Exception e) {
 		}
+	}
+
+	private boolean runForced = false;
+	
+	@Override
+	public synchronized void runForcedEvent() {
+		System.out.println("Run forced!");
+		
+		if (!runForced) {
+			runForced = true;
+		} else {
+			fail("Run should only be forced once!");
+		}
+	}
+	
+	private Integer lastNumber = -1;
+	
+	@Override
+	public synchronized void runEvent(Integer number) {
+		System.out.println("Run " + number);
+		
+		assertEquals((lastNumber + 1), number.intValue());
+		lastNumber++;
+		
+		if (number.intValue() == 20) {
+			lastNumber++;
+		}
+	}
+	
+	@Override
+	public synchronized void addEvent(Integer number) {
+		System.out.println("\tAdd " + number);
 	}
 }
