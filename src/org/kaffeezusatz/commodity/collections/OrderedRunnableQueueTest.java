@@ -7,7 +7,7 @@ import org.kaffeezusatz.commodity.collections.OrderedRunnableQueue.OrderedRunnab
 
 public class OrderedRunnableQueueTest implements OrderedRunnableQueueListener {
 	@Test
-	public final void add() {
+	public final void testAdd() {
 		final Runnable r = new Runnable() {
 			@Override
 			public void run() {
@@ -22,7 +22,15 @@ public class OrderedRunnableQueueTest implements OrderedRunnableQueueListener {
 		orq.add(0, r); // 0
 		orq.add(3, r); // 1
 		orq.add(2, r); // 2
+		
+		assertEquals(2, orq.size());
+		
 		orq.add(1, r); // 3
+
+		assertEquals(0, orq.size());
+		
+		assertEquals(3, orq.getLast());
+		
 		orq.add(4, r); // 4
 		orq.add(6, r); // 5
 		orq.add(5, r); // 6
@@ -46,10 +54,14 @@ public class OrderedRunnableQueueTest implements OrderedRunnableQueueListener {
 		orq.add(22, r); // 24
 		orq.add(25, r); // 25
 		orq.add(21, r); // 26
+		
+		assertEquals(26, orq.getLast());
+		
+		assertEquals(1, orq.size());
 	}
 	
 	@Test
-	public final void addNull() {
+	public final void testAddNull() {
 		final OrderedRunnableQueue orq = new OrderedRunnableQueue(5);
 		try {
 			orq.add(null);
@@ -61,10 +73,9 @@ public class OrderedRunnableQueueTest implements OrderedRunnableQueueListener {
 		
 		try {
 			orq.add(null, null);
-		} catch (Exception e) {
-		}
+		} catch (Exception e) {}
 	}
-
+	
 	private boolean runForced = false;
 	
 	@Override

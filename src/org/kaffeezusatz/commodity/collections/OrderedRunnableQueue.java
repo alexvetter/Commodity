@@ -8,13 +8,13 @@ import java.util.TreeMap;
 public class OrderedRunnableQueue {
 	
 	private final int runEveryEntries;
-	
+		
+	private final TreeMap<Integer, Runnable> queue;
+
+	private final List<OrderedRunnableQueueListener> listener;
+
 	private Integer lastNumber;
 	
-	private TreeMap<Integer, Runnable> queue;
-
-	private List<OrderedRunnableQueueListener> listener;
-
 	/**
 	 * Ausfuehren wenn kein Leak oder Ausfuehren nach X neuen Elementen.
 	 */
@@ -61,6 +61,14 @@ public class OrderedRunnableQueue {
 		add(or.getNumber(), or);
 	}
 	
+	public synchronized int size() {
+		return this.queue.size();
+	}
+	
+	public synchronized int getLast() {
+		return this.lastNumber.intValue();
+	}
+	
 	/**
 	 * Iterates over queue and run only queued runnables without leak!
 	 * After X leaks queue will be handled as it is, disregard its leaks!
@@ -68,19 +76,22 @@ public class OrderedRunnableQueue {
 	protected void runOrdered() {
 		int last = lastNumber.intValue() + 1;
 		
-		TreeMap<Integer, Runnable> mapCopy = new TreeMap<Integer, Runnable>(queue);
+		TreeMap<Integer, Runnable> queueCopy = new TreeMap<Integer, Runnable>(queue);
 		
-		for (Entry<Integer, Runnable> runnable : mapCopy.entrySet()) {
+		for (Entry<Integer, Runnable> runnable : queueCopy.entrySet()) {
 			if (last == runnable.getKey().intValue()) {
 				last += 1;
-				lastNumber = runnable.getKey();
 				
 				fireRunEvent(runnable.getKey());
 				queue.remove(runnable.getKey()).run();
-			} else if (runEveryEntries == queue.size()) {
-				runForced();
-				last = lastNumber.intValue() + 1;
 			}
+		}
+		
+		queueCopy.clear();
+		queueCopy = null;
+		
+		if (queue.size() >= runEveryEntries) {
+			runForced();
 		}
 	}
 	
@@ -92,11 +103,8 @@ public class OrderedRunnableQueue {
 		
 		synchronized (queue) {
 			for (Entry<Integer, Runnable> entry : queue.entrySet()) {
-				if (entry.getValue() != null) {
-					fireRunEvent(entry.getKey());
-					entry.getValue().run();
-				}
-				lastNumber = entry.getKey();
+				fireRunEvent(entry.getKey());
+				entry.getValue().run();
 			}
 		}
 		
@@ -110,6 +118,8 @@ public class OrderedRunnableQueue {
 	}
 	
 	private void fireRunEvent(final Integer number) {
+		lastNumber = number;
+		
 		for (OrderedRunnableQueueListener listener : this.listener) {
 			listener.runEvent(number);
 		}
