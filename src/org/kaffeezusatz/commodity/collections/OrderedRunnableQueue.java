@@ -15,6 +15,8 @@ public class OrderedRunnableQueue {
 
 	private Integer lastNumber;
 	
+	private Integer runCountPerAdd;
+	
 	/**
 	 * Ausfuehren wenn kein Leak oder Ausfuehren nach X neuen Elementen.
 	 */
@@ -48,9 +50,20 @@ public class OrderedRunnableQueue {
 		
 		fireAddEvent(number);
 		
-		this.queue.put(number, runnable);
+		runCountPerAdd = 0;
+		
+		queue.put(number, runnable);
 		
 		runOrdered();
+		
+		if (queue.size() > 0) {
+			/*
+			 * TODO Add TimerTask which runs runForced, 
+			 * because it's possible that we don't get a new Runnable.
+			 */
+		}
+		
+		fireDoneEvent(number, runCountPerAdd);
 	}
 	
 	public synchronized void add(final OrderedRunnable or) {
@@ -74,16 +87,26 @@ public class OrderedRunnableQueue {
 	 * After X leaks queue will be handled as it is, disregard its leaks!
 	 */
 	protected void runOrdered() {
-		int last = lastNumber.intValue() + 1;
-		
 		TreeMap<Integer, Runnable> queueCopy = new TreeMap<Integer, Runnable>(queue);
 		
 		for (Entry<Integer, Runnable> runnable : queueCopy.entrySet()) {
-			if (last == runnable.getKey().intValue()) {
-				last += 1;
+			int currentKey = runnable.getKey().intValue();
+			int nextKey = lastNumber + 1;
+			
+			if (nextKey == currentKey) {
+				/* yeaah, right order, run it! */
 				
 				fireRunEvent(runnable.getKey());
+				
+				lastNumber = currentKey;
 				queue.remove(runnable.getKey()).run();
+			} else if (nextKey > currentKey) {
+				/* ooh, we got an old one, run it anyway! */
+
+				fireRunEvent(runnable.getKey());
+				queue.remove(runnable.getKey()).run();
+			} else {
+				/* damn, wrong order! don't run! */
 			}
 		}
 		
@@ -101,11 +124,10 @@ public class OrderedRunnableQueue {
 	protected void runForced() {
 		fireRunForcedEvent();
 		
-		synchronized (queue) {
-			for (Entry<Integer, Runnable> entry : queue.entrySet()) {
-				fireRunEvent(entry.getKey());
-				entry.getValue().run();
-			}
+		for (Entry<Integer, Runnable> entry : queue.entrySet()) {
+			fireRunEvent(entry.getKey());
+			lastNumber = entry.getKey();
+			entry.getValue().run();
 		}
 		
 		queue.clear();
@@ -118,7 +140,7 @@ public class OrderedRunnableQueue {
 	}
 	
 	private void fireRunEvent(final Integer number) {
-		lastNumber = number;
+		runCountPerAdd++;
 		
 		for (OrderedRunnableQueueListener listener : this.listener) {
 			listener.runEvent(number);
@@ -131,14 +153,23 @@ public class OrderedRunnableQueue {
 		}
 	}
 	
+	private void fireDoneEvent(final Integer number, final Integer runCount) {
+		for (OrderedRunnableQueueListener listener : this.listener) {
+			listener.doneEvent(number, runCount);
+		}
+	}
+	
 	public static interface OrderedRunnable extends Runnable {
 		public int getNumber();
 	}
 	
 	public static interface OrderedRunnableQueueListener {
+		
 		public void addEvent(final Integer number);
 		
 		public void runEvent(final Integer number);
+		
+		public void doneEvent(final Integer number, final Integer runCount);
 		
 		public void runForcedEvent();
 	}

@@ -57,7 +57,7 @@ public class OrderedRunnableQueueTest implements OrderedRunnableQueueListener {
 		
 		assertEquals(26, orq.getLast());
 		
-		assertEquals(1, orq.size());
+		assertEquals(0, orq.size());
 	}
 	
 	@Test
@@ -95,6 +95,10 @@ public class OrderedRunnableQueueTest implements OrderedRunnableQueueListener {
 	public synchronized void runEvent(Integer number) {
 		System.out.println("Run " + number);
 		
+		if ((lastNumber + 1) == 27 && number.intValue() == 21) {
+			return;
+		}
+		
 		assertEquals((lastNumber + 1), number.intValue());
 		lastNumber++;
 		
@@ -106,5 +110,10 @@ public class OrderedRunnableQueueTest implements OrderedRunnableQueueListener {
 	@Override
 	public synchronized void addEvent(Integer number) {
 		System.out.println("\tAdd " + number);
+	}
+
+	@Override
+	public void doneEvent(Integer number, Integer runCount) {
+		System.out.println("\t\tDone " + number + " runned " + runCount);
 	}
 }
