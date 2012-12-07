@@ -23,6 +23,10 @@ public class SingleLineTextPane extends JTextPane {
 	}
 
 	private class NewLineFilter extends DocumentFilter {
+		public NewLineFilter() {
+			super();
+		}
+
 		public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
 			fb.insertString(offset, string.replaceAll("\\n", ""), attr);
 		}

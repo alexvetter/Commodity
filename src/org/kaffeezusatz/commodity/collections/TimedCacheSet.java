@@ -47,11 +47,11 @@ import java.util.TimerTask;
  * detect bugs.</i>
  * 
  */
-public class TimedCacheSet<E> extends AbstractSet<E> implements Set<E>, Cloneable {
+public class TimedCacheSet<E> extends AbstractSet<E> implements Cloneable {
 
 	private long cacheExpire;
 
-	private Set<CacheItem<E>> set;
+	protected Set<CacheItem<E>> set;
 
 	private Timer timer;
 

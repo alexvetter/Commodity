@@ -57,7 +57,7 @@ public class MergeList<E extends Comparable<E>> implements Iterable<E> {
 	 * 
 	 * @return
 	 */
-	private List<Iterator<E>> getIteratorList() {
+	protected List<Iterator<E>> getIteratorList() {
 		List<Iterator<E>> iterators = new ArrayList<Iterator<E>>(5);
 
 		for (List<E> list : lists) {
@@ -159,7 +159,10 @@ public class MergeList<E extends Comparable<E>> implements Iterable<E> {
 						ir = i2;
 					}
 				}
-				this.next.set(ir, null);
+				
+				if (ir != null) {
+					this.next.set(ir, null);
+				}
 
 				return r;
 			}

@@ -28,7 +28,7 @@ public class TimedCacheSetTest extends TestCase {
 		assertTrue(cs.contains("hallo4"));
 		assertTrue(cs.contains("hallo3"));
 		
-		Thread.sleep(100);
+		Thread.sleep(200);
 		
 		assertFalse(cs.contains("hallo3"));
 		assertFalse(cs.contains("hallo5"));
