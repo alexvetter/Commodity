@@ -6,6 +6,7 @@ public class Joiner {
 	private String joiner;
 	private boolean ignoreNull = false;
 	private boolean removeTrailingJoiner = false;
+	private String nullString = "null";
 	
 	private Joiner(String joiner) {
 		this.joiner = joiner;
@@ -13,6 +14,11 @@ public class Joiner {
 	
 	public Joiner setIgnoreNull() {
 		this.ignoreNull = true;
+		return this;
+	}
+	
+	public Joiner setNullString(final String nullString) {
+		this.nullString  = nullString;
 		return this;
 	}
 	
@@ -38,7 +44,7 @@ public class Joiner {
 				joined.append(this.joiner);
 			}
 			
-			part = object.toString();
+			part = object != null ? object.toString() : this.nullString;
 			part = removeLeadingJoiner(part, this.joiner);
 			
 			joined.append(part);

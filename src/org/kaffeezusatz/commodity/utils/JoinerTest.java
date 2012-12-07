@@ -12,4 +12,10 @@ public class JoinerTest {
 		assertEquals("a.b.c.d.", Joiner.on(".").join("a", "b", "c.", ".d."));
 		assertEquals("http://google.de/test/Hello", Joiner.on("/").join("http://", "google.de", "test", "Hello"));
 	}
+	
+	@Test
+	public void testNull() {
+		assertEquals("", Joiner.on(".").setIgnoreNull().join(null, null, null));
+		assertEquals("null.null.null", Joiner.on(".").setNullString("null").join(null, null, null));
+	}
 }
