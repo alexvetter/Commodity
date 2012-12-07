@@ -15,12 +15,16 @@ public class HighlighterDocumentListener implements DocumentListener {
 
 	final Set<String> highlightWords = new HashSet<String>();
 
-	DefaultHighlighter.DefaultHighlightPainter highlightPainter = new DefaultHighlighter.DefaultHighlightPainter(Color.YELLOW);
-	
+	DefaultHighlighter.DefaultHighlightPainter highlightPainter;
 	Highlighter highlighter;
 
-	public HighlighterDocumentListener(Highlighter highlighter) {
+	public HighlighterDocumentListener(Highlighter highlighter, Color color) {
 		this.highlighter = highlighter;
+		this.highlightPainter = new DefaultHighlighter.DefaultHighlightPainter(color);
+	}
+	
+	public HighlighterDocumentListener(Highlighter highlighter) {
+		this(highlighter, Color.YELLOW);
 	}
 
 	public Highlighter getHighlighter() {
