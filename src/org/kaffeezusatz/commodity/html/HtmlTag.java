@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
 
 public class HtmlTag {
 	private Map<String, String> attributes;
@@ -60,7 +60,7 @@ public class HtmlTag {
 	}
 	
 	public HtmlTag setValue(String value) {
-		this.value = new StringBuffer(StringEscapeUtils.escapeHtml(value));
+		this.value = new StringBuffer(StringEscapeUtils.escapeHtml4(value));
 		return this;
 	}
 	
