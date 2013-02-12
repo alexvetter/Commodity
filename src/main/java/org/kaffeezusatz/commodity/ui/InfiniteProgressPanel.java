@@ -280,7 +280,6 @@ public class InfiniteProgressPanel extends JComponent implements MouseListener {
 		
 		public void execute(final Runnable task) {
 			SwingUtilities.invokeLater(new Runnable() {
-				@Override
 				public void run() {
 					new InfiniteProgressPanelThread(task).start();
 				}

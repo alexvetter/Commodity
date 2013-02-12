@@ -9,7 +9,6 @@ public class OrderedRunnableQueueTest implements OrderedRunnableQueueListener {
 	@Test
 	public final void testAdd() {
 		final Runnable r = new Runnable() {
-			@Override
 			public void run() {
 				//System.out.println("Peter");
 			}
@@ -78,7 +77,6 @@ public class OrderedRunnableQueueTest implements OrderedRunnableQueueListener {
 	
 	private boolean runForced = false;
 	
-	@Override
 	public synchronized void runForcedEvent() {
 		System.out.println("Run forced!");
 		
@@ -91,7 +89,6 @@ public class OrderedRunnableQueueTest implements OrderedRunnableQueueListener {
 	
 	private Integer lastNumber = -1;
 	
-	@Override
 	public synchronized void runEvent(Integer number) {
 		System.out.println("Run " + number);
 		
@@ -107,12 +104,10 @@ public class OrderedRunnableQueueTest implements OrderedRunnableQueueListener {
 		}
 	}
 	
-	@Override
 	public synchronized void addEvent(Integer number) {
 		System.out.println("\tAdd " + number);
 	}
 
-	@Override
 	public void doneEvent(Integer number, Integer runCount) {
 		System.out.println("\t\tDone " + number + " runned " + runCount);
 	}

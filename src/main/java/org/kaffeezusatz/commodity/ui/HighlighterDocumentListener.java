@@ -70,18 +70,14 @@ public class HighlighterDocumentListener implements DocumentListener {
 		}
 	}
 
-	
-	@Override
 	public void insertUpdate(DocumentEvent e) {
 		changedUpdate(e);
 	}
 
-	@Override
 	public void removeUpdate(DocumentEvent e) {
 		changedUpdate(e);
 	}
 
-	@Override
 	public void changedUpdate(final DocumentEvent e) {
 		final Runnable r = new Runnable() {
 			public void run() {

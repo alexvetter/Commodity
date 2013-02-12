@@ -94,7 +94,6 @@ public class MergeList<E extends Comparable<E>> implements Iterable<E> {
 			List<E> next = new ArrayList<E>();
 			boolean init = false;
 
-			@Override
 			public boolean hasNext() {
 				init();
 
@@ -113,7 +112,6 @@ public class MergeList<E extends Comparable<E>> implements Iterable<E> {
 				return false;
 			}
 
-			@Override
 			public E next() {
 				init();
 
@@ -167,7 +165,6 @@ public class MergeList<E extends Comparable<E>> implements Iterable<E> {
 				return r;
 			}
 
-			@Override
 			public void remove() {
 				throw new UnsupportedOperationException();
 			}

@@ -19,7 +19,6 @@ public class AppenderButton extends JButton implements ActionListener {
 		addActionListener(this);
 	}
 
-	@Override
 	public void actionPerformed(ActionEvent e) {
 		this.component.setText(this.component.getText() + text);
 	}

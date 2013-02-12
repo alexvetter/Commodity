@@ -34,7 +34,6 @@ public class FileChooserActionListener implements ActionListener {
 		}
 	}
 	
-	@Override
 	public void actionPerformed(final ActionEvent e) {
 		//In response to a button click:
 		int returnVal = fc.showOpenDialog(parent);
