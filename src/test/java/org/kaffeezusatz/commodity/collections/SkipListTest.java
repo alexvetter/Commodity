@@ -1,11 +1,11 @@
 package org.kaffeezusatz.commodity.collections;
+
 import org.junit.Test;
-import org.kaffeezusatz.commodity.collections.SkipList;
 
 public class SkipListTest {
-	@Test
+    @Test
 	public final void testInsert() {
-		SkipList<Integer> list = new SkipList<Integer>(6, 0.5, Integer.MIN_VALUE, Integer.MAX_VALUE);
+		SkipList<Integer> list = new SkipList<Integer>(6, 0.5);
 		
 		list.insert(1, 3);
 		list.insert(0, 6);
@@ -30,7 +30,7 @@ public class SkipListTest {
 	
 	@Test
 	public final void testSpecialInsert() {
-		SkipList<Integer> list = new SkipList<Integer>(6, 0.5, Integer.MIN_VALUE, Integer.MAX_VALUE);
+		SkipList<Integer> list = new SkipList<Integer>(6, 0.5);
 		
 		for (int i = 1; i < 100000; i++) {
 			list.insert((3*i + i*i) % 123456761);
