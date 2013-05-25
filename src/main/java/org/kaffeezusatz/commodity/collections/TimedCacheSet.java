@@ -53,15 +53,13 @@ public class TimedCacheSet<E> extends AbstractSet<E> implements Cloneable {
 
 	protected Set<CacheItem<E>> set;
 
-	private Timer timer;
-
 	private TimerTask gc;
 
 	public TimedCacheSet(long cacheExpire) {
 		this.cacheExpire = cacheExpire;
 		this.set = new HashSet<CacheItem<E>>();
 
-		gc = new TimerTask() {
+		this.gc = new TimerTask() {
 			public void run() {
 				try {
 					Set<CacheItem<E>> s = new HashSet<CacheItem<E>>(set);
@@ -76,8 +74,8 @@ public class TimedCacheSet<E> extends AbstractSet<E> implements Cloneable {
 			}
 		};
 
-		timer = new Timer("TimedCacheSet", true);
-		timer.schedule(gc, 0, this.cacheExpire);
+        Timer timer = new Timer("TimedCacheSet", true);
+        timer.schedule(gc, 0, this.cacheExpire);
 	}
 
 	public TimedCacheSet(Set<E> toTransform, long cacheExpire) {
