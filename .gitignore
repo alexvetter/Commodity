@@ -1,4 +1,7 @@
-target/*
-dist/*
-reports/*
+target/
+log/
+
 .DS_Store
+
+*.iml
+*.iws
