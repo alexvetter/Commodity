@@ -1,14 +1,20 @@
 package org.kaffeezusatz.commodity.collections;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class SkipList<T extends Comparable<? super T>> implements Set<T> {
 
+    private static final int DEFAULT_MAXLEVEL = 6;
+    private static final double DEFAULT_RISERATE = 0.25;
+
+    /**
+     *
+     */
     private final List<SkipNode<T>> sentinels;
+
+    /**
+     *
+     */
     private final int maxLevel;
 
     /**
@@ -16,26 +22,35 @@ public class SkipList<T extends Comparable<? super T>> implements Set<T> {
      */
     private final double riseRate;
 
+    public SkipList() {
+        this(DEFAULT_MAXLEVEL, DEFAULT_RISERATE);
+    }
+    
     public SkipList(int maxLevel, double riseRate) {
         this.maxLevel = maxLevel;
         this.riseRate = riseRate;
+        this.sentinels = getSentinels(this.maxLevel);
+    }
 
-        this.sentinels = new ArrayList<SkipNode<T>>(this.maxLevel);
+    protected List<SkipNode<T>> getSentinels(int maxLevel) {
+        List<SkipNode<T>> sentinels = new ArrayList<SkipNode<T>>(maxLevel);
 
         /* init array list */
-        for (int i = 0; i < this.maxLevel; i++) {
-            this.sentinels.add(null);
+        for (int i = 0; i < maxLevel; i++) {
+            sentinels.add(null);
         }
 
         SentinelSkipNode rightSentinel = null;
         SentinelSkipNode leftSentinel = null;
 
-        for (int i = this.maxLevel - 1; i >= 0; i--) {
+        for (int i = maxLevel - 1; i >= 0; i--) {
             rightSentinel = new SentinelSkipNode(null, rightSentinel);
             leftSentinel = new SentinelSkipNode(rightSentinel, leftSentinel);
 
-            this.sentinels.set(i, leftSentinel);
+            sentinels.set(i, leftSentinel);
         }
+
+        return sentinels;
     }
 
     @Override
@@ -57,17 +72,29 @@ public class SkipList<T extends Comparable<? super T>> implements Set<T> {
 
     @Override
     public Iterator<T> iterator() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return new SkipListIterator(this.sentinels.get(this.maxLevel - 1));
     }
 
     @Override
     public Object[] toArray() {
-        return new Object[0];  //To change body of implemented methods use File | Settings | File Templates.
+        Object array[] = new Object[this.size()];
+
+        int i = 0;
+        for (T e : this) {
+            array[i++] = e;
+        }
+
+        return array;
     }
 
     @Override
-    public <T> T[] toArray(T[] t) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    public <E> E[] toArray(E[] array) {
+        int i = 0;
+        for (T e : this) {
+            array[i++] = (E) e;
+        }
+
+        return array;
     }
 
     @Override
@@ -190,17 +217,24 @@ public class SkipList<T extends Comparable<? super T>> implements Set<T> {
     }
 
     public void clear() {
-        // not yet implemented
+        this.sentinels.clear();
+        this.sentinels.addAll(getSentinels(this.maxLevel));
     }
 
     public boolean equals(Object o) {
-        // not yet implemented
-        return false;
+        if (o == null) return false;
+        if (!(o instanceof SkipList)) return false;
+
+        return this.size() == ((SkipList<T>) o).size() && this.hashCode() == o.hashCode();
     }
 
     public int hashCode() {
-        // not yet implemented
-        return -1;
+        int hashCode = 1;
+        for (T e : this) {
+            hashCode = 31 * hashCode + (e == null ? 0 : e.hashCode());
+        }
+
+        return hashCode;
     }
 
     @Override
@@ -291,6 +325,43 @@ public class SkipList<T extends Comparable<? super T>> implements Set<T> {
         @Override
         public int compareTo(T t) {
             return payload.compareTo(t);
+        }
+    }
+
+    public class SkipListIterator implements Iterator<T> {
+        SkipNode<T> current;
+
+        public SkipListIterator(SkipNode<T> sentinel) {
+            this.current = sentinel.getRight();
+        }
+
+        @Override
+        public boolean hasNext() {
+            //SkipNode<T> right = this.current.getRight();
+            //return right != null && !(SentinelSkipNode.class.isAssignableFrom(right.getClass()));
+
+            return isNext();
+        }
+
+        public boolean isNext() {
+            return current != null && !(SentinelSkipNode.class.isAssignableFrom(current.getClass()));
+        }
+
+        @Override
+        public T next() {
+            if (!isNext()) {
+                throw new NoSuchElementException();
+            }
+
+            SkipNode<T> next = this.current;
+            this.current = this.current.getRight();
+
+            return next.getPayload();
+        }
+
+        @Override
+        public void remove() {
+            throw new UnsupportedOperationException();
         }
     }
 }
