@@ -2,7 +2,7 @@ package org.kaffeezusatz.commodity.collections;
 
 import java.util.*;
 
-public class SkipList<T extends Comparable<? super T>> implements Set<T> {
+public class SkipList<T extends Comparable<? super T>> implements SortedSet<T> {
 
     private static final int DEFAULT_MAXLEVEL = 6;
     private static final double DEFAULT_RISERATE = 0.25;
@@ -239,6 +239,10 @@ public class SkipList<T extends Comparable<? super T>> implements Set<T> {
 
     @Override
     public int size() {
+        if (isEmpty()) {
+            return 0;
+        }
+
         SkipNode<T> current = this.sentinels.get(this.maxLevel - 1);
 
         int size = -2; // because of sentinels
@@ -252,7 +256,10 @@ public class SkipList<T extends Comparable<? super T>> implements Set<T> {
 
     @Override
     public boolean isEmpty() {
-        return (size() == 0);
+        SkipNode<T> node = this.sentinels.get(this.maxLevel - 1).getRight();
+
+        // if right of lowest sentinels is also a sentinel than the list is empty
+        return node.isSentinel();
     }
 
     public String toString() {
@@ -274,6 +281,108 @@ public class SkipList<T extends Comparable<? super T>> implements Set<T> {
         return string.toString();
     }
 
+    @Override
+    public Comparator<? super T> comparator() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    /**
+     * Returns a view of the portion of this set whose elements range from fromElement, inclusive, to toElement, exclusive.
+     *
+     * @param fromElement low endpoint (inclusive) of the returned set
+     * @param toElement high endpoint (exclusive) of the returned set
+     * @return a view of the portion of this set whose elements range from fromElement, inclusive, to toElement, exclusive
+     */
+    @Override
+    public SortedSet<T> subSet(T fromElement, T toElement) {
+        SkipList<T> subSet = new SkipList<T>(this.maxLevel, this.riseRate);
+
+        for (T element : this) {
+            if (element.compareTo(fromElement) >= 0 && element.compareTo(toElement) < 0) {
+                subSet.add(element);
+            } else if (element.compareTo(toElement) >= 0) {
+                break;
+            }
+        }
+
+        return subSet;
+    }
+
+
+    /**
+     * Returns a view of the portion of this set whose elements are strictly less than toElement.
+     *
+     * @param toElement high endpoint (exclusive) of the returned set
+     * @return
+     */
+    @Override
+    public SortedSet<T> headSet(T toElement) {
+        SkipList<T> headSet = new SkipList<T>(this.maxLevel, this.riseRate);
+
+        for (T element : this) {
+            if (element.compareTo(toElement) >= 0) {
+                break;
+            }
+
+            headSet.add(element);
+        }
+
+        return headSet;
+    }
+
+    /**
+     * Returns a view of the portion of this set whose elements are greater than or equal to fromElement.
+     *
+     * @param fromElement low endpoint (inclusive) of the returned set
+     * @return
+     */
+    @Override
+    public SortedSet<T> tailSet(T fromElement) {
+        SkipList<T> tailSet = new SkipList<T>(this.maxLevel, this.riseRate);
+
+        for (T element : this) {
+            if (element.compareTo(fromElement) >= 0) {
+                tailSet.add(element);
+            }
+        }
+
+        return tailSet;
+    }
+
+    /**
+     * lowest element
+     *
+     * @return lowest element
+     */
+    @Override
+    public T first() {
+        return iterator().next();
+    }
+
+    /**
+     * greatest element
+     *
+     * @return greatest element
+     */
+    @Override
+    public T last() {
+        if (isEmpty()) {
+            throw new NoSuchElementException();
+        }
+
+        T last = null;
+        for (T temp : this) {
+            last = temp;
+        }
+
+        return last;
+    }
+
+    /**
+     * Helper class for SkipList
+     *
+     * SentinelSkipNode is always greater compareTo other <T>
+     */
     class SentinelSkipNode extends SkipNode<T> {
         SentinelSkipNode(SkipNode<T> right, SkipNode<T> down) {
             super(null, right, down);
@@ -289,8 +398,18 @@ public class SkipList<T extends Comparable<? super T>> implements Set<T> {
         public String toString() {
             return "Sentinel";
         }
+
+        @Override
+        public boolean isSentinel() {
+            return true;
+        }
     }
 
+    /**
+     * Helper class for SkipList
+     *
+     * @param <T> the payload of SkipNode must
+     */
     class SkipNode<T extends Comparable<? super T>> implements Comparable<T> {
         private T payload;
         private SkipNode<T> right;
@@ -326,10 +445,17 @@ public class SkipList<T extends Comparable<? super T>> implements Set<T> {
         public int compareTo(T t) {
             return payload.compareTo(t);
         }
+
+        public boolean isSentinel() {
+            return false;
+        }
     }
 
+    /**
+     * Iterator for SkipList
+     */
     public class SkipListIterator implements Iterator<T> {
-        SkipNode<T> current;
+        private SkipNode<T> current;
 
         public SkipListIterator(SkipNode<T> sentinel) {
             this.current = sentinel.getRight();
@@ -337,19 +463,12 @@ public class SkipList<T extends Comparable<? super T>> implements Set<T> {
 
         @Override
         public boolean hasNext() {
-            //SkipNode<T> right = this.current.getRight();
-            //return right != null && !(SentinelSkipNode.class.isAssignableFrom(right.getClass()));
-
-            return isNext();
-        }
-
-        public boolean isNext() {
-            return current != null && !(SentinelSkipNode.class.isAssignableFrom(current.getClass()));
+            return ( (current != null) && (!current.isSentinel()) );
         }
 
         @Override
         public T next() {
-            if (!isNext()) {
+            if (!hasNext()) {
                 throw new NoSuchElementException();
             }
 
